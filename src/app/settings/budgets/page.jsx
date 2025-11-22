@@ -9,6 +9,7 @@ import NewBudgetForm from "./components/form";
 import Drawer from "../../components/drawer";
 import { Header } from "../../components/header";
 import { listUserCategory } from "@/src/redux/slices/category.slice";
+import { AddBudget } from "./components/addButton";
 
 // =======================================================
 // 🛠️ HELPER FUNCTIONS
@@ -40,7 +41,6 @@ export default function BudgetManager() {
 
   const handleEditClick = useCallback(
     (categoryId) => {
-      console.log({ categoryId });
 
       const category = categories.find((c) => c._id === categoryId);
       const currentCents = category?.budget?.limitCents || 0; // Initialize the edit value with the current budget
@@ -85,10 +85,8 @@ export default function BudgetManager() {
           categoryId, Math.round(limitDollars * 100);
         }
         setEditingId(null);
-        console.log(`Budget for ${categoryId} updated.`);
       } catch (error) {
         console.error("Update failed:", error);
-        alert("Failed to save budget. Please check server logs.");
       } finally {
         setIsSaving(false);
       }
@@ -105,8 +103,6 @@ export default function BudgetManager() {
       const confirm = window.confirm(
         `Are you sure you want to delete the budget ?`
       );
-      console.log({ confirm });
-
       if (confirm) {
         await dispatch(
           deleteOneBudget({
@@ -133,12 +129,7 @@ export default function BudgetManager() {
     <div className="p-4 md:p-8 max-w-4xl mx-auto bg-gray-50 min-h-screen">
       <Header>
         <Month close={close} />
-        <button
-          className="cursore-pointer bg-blue text-black cursore-pointer"
-          onClick={() => open()}
-        >
-          Add Budget
-        </button>
+        <AddBudget isOpen={open}/>
       </Header>
       <div className="bg-white shadow-xl rounded-xl p-6 mt-6">
         {" "}
@@ -147,14 +138,14 @@ export default function BudgetManager() {
         </p>{" "}
         <div className="space-y-4">
           {" "}
-          {categories.map((category) => {
+          {categories.map((category,index) => {
             const isEditing = editingId === category._id;
             const currentCents = category?.budget?.limitCents || 0;
             const currentLimitDisplay = formatCentsToDollars(currentCents);
 
             return (
               <div
-                key={category._id}
+                key={index}
                 className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border-b sm:border-b-0 last:border-b-0 hover:bg-gray-50 rounded-lg transition-colors"
               >
                 {/* Category Name */}{" "}

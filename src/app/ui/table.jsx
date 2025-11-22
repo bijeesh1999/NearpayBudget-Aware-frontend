@@ -38,7 +38,6 @@ export default function DataTable() {
   // useEffects
 
   React.useEffect(() => {
-    console.log({ params });
 
     dispatch(tasksList(params));
   }, [params]);
@@ -49,7 +48,6 @@ export default function DataTable() {
     if (params.sort.field === field && params.sort.direction === "asc") {
       action = "desc";
     }
-    console.log({ field, action });
     setParams((prev) => ({
       ...prev,
       sort: {

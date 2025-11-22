@@ -5,6 +5,7 @@ import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { signup } from "@/src/redux/slices/user.slice";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -49,8 +50,7 @@ export default function SignUpPage() {
       return errors;
     },
     onSubmit: (values) => {
-      console.log("Form submitted:", values);
-      alert("Sign up successful! Check console for form data.");
+      alert("Sign up successful! Check  for form data.");
       dispatch(signup(values));
     },
   });
@@ -254,12 +254,12 @@ export default function SignUpPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
-              <a
-                href="#"
+              <Link
+                href="/login"
                 className="font-medium text-purple-600 hover:text-purple-500"
               >
                 Sign in
-              </a>
+              </Link>
             </p>
           </div>
         </div>

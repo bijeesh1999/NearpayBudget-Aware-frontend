@@ -7,38 +7,13 @@ import { Header } from "../components/header";
 import Drawer from "../components/drawer";
 import ExpenseForm from "./components/form";
 import { useDispatch, useSelector } from "react-redux";
-
-// 1. Mock Data Generator
-const INITIAL_DATA = [
-  {
-    id: 1,
-    name: "Food & Dining",
-    color: "bg-orange-500",
-    spent: 450,
-    limit: 600,
-  },
-  {
-    id: 2,
-    name: "Transportation",
-    color: "bg-blue-500",
-    spent: 120,
-    limit: 200,
-  },
-  {
-    id: 3,
-    name: "Entertainment",
-    color: "bg-purple-500",
-    spent: 350,
-    limit: 300,
-  }, // Over budget
-  { id: 4, name: "Shopping", color: "bg-pink-500", spent: 180, limit: 500 },
-  { id: 5, name: "Utilities", color: "bg-green-500", spent: 295, limit: 300 }, // Warning territory
-];
+import { resetStatus } from "@/src/redux/slices/user.slice";
 
 const Dashboard = () => {
   const categories = useSelector((state) => state.category.categories);
-    const {status} = useSelector((state) => state.expenses);
-  
+  const { status } = useSelector((state) => state.expenses);
+
+  const dispatch = useDispatch();
 
   console.log({ categories });
 
@@ -52,6 +27,11 @@ const Dashboard = () => {
     setIsOpen(false);
   };
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      dispatch(resetStatus());
+    }, 50);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-slate-800">
@@ -65,7 +45,7 @@ const Dashboard = () => {
         {/* Desktop "Add Expense" Button (Hidden on Mobile) */}
         <AddExpense isOpen={isOpen} />
         <Drawer isOpen={open} onClose={onClose} title={"Expense"}>
-          <ExpenseForm onClose={onClose}/>
+          <ExpenseForm onClose={onClose} />
         </Drawer>
       </Header>
 
@@ -77,10 +57,10 @@ const Dashboard = () => {
 
         {/* Responsive Grid: 1 col mobile, 2 cols tablet, 3 cols desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {categories?.map((cat) => {
+          {categories?.map((cat, index) => {
             return (
               <div
-                key={cat.id}
+                key={index}
                 className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative overflow-hidden"
               >
                 <ExpenseCard cat={cat} />

@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "../redux/store/store";
 import { Sidebar } from "./components/sidebar";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,17 +25,17 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({ children }) {
   const router = useRouter();
+  const params = usePathname();
+
+  const token = Cookies.get("USER_TOKEN");
 
   React.useEffect(() => {
-    // Get a cookie
-    const user = Cookies.get("USER_TOKEN");
-
-    if (!user) {
+    if (token) {
+      router.push("/dashboard");
+    } else {
       router.push("/login");
     }
-
-    console.log("User:", user);
-  }, []);
+  }, [token]);
 
   return (
     <html lang="en">

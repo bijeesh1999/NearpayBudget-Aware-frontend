@@ -61,8 +61,6 @@ export default function ExpenseForm({ onClose }) {
 
   const { status } = useSelector((state) => state.expenses);
 
-  console.log({ category, singleStatus });
-
   const dispatch = useDispatch();
 
   // Define the validation schema using Yup
@@ -94,8 +92,6 @@ export default function ExpenseForm({ onClose }) {
       });
     },
   });
-
-  console.log({ values: formik.values });
 
   // Determine toast appearance
 

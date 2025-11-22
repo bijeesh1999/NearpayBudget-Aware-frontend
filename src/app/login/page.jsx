@@ -5,16 +5,14 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, signup } from "@/src/redux/slices/user.slice";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+
 import Link from "next/link";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const {status}  = useSelector((state) => state.user);
-
-  console.log({status});
-  
-
+  const { status } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -43,13 +41,10 @@ export default function LoginPage() {
       return errors;
     },
     onSubmit: (values) => {
-      console.log("Form submitted:", values);
-      alert("Login successful! Check console for form data.");
       dispatch(login(values));
+      router.push("/dashboard");
     },
   });
-
-  console.log({ values: formik.values });
 
   const handleSubmit = (e) => {
     e.preventDefault();

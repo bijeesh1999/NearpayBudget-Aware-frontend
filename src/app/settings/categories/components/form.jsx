@@ -30,7 +30,6 @@ export default function CategoryForm({ category, setCategory }) {
 
   const { isLoading } = useSelector((state) => state.category);
 
-  console.log({ isLoading });
 
   // Initialize Formik hook
   const formik = useFormik({

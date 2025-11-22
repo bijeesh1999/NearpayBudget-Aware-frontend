@@ -15,7 +15,6 @@ export const createNewExpense = createAsyncThunk(
 );
 
 export const listExpense = createAsyncThunk("expense/list", async (body) => {
-  console.log(body);
   const res = await findAllExpenses(body);
   return res.data;
 });
@@ -23,7 +22,6 @@ export const listExpense = createAsyncThunk("expense/list", async (body) => {
 export const putOneExpense = createAsyncThunk(
   "expense/update",
   async (body) => {
-    console.log(body);
 
     const res = await updateExpenses(id, body);
     return res.data;
@@ -33,7 +31,6 @@ export const putOneExpense = createAsyncThunk(
 export const deleteOneExpense = createAsyncThunk(
   "expense/delete",
   async (body) => {
-    console.log(body);
 
     const res = await deleteExpenses(id, body);
     return res.data;

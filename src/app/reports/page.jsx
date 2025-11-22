@@ -1,27 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import { Header } from "../components/header";
 import { Month } from "../dashboard/components/dates";
 import { useSelector } from "react-redux";
 
-// --- MOCK DATA (Reused from Dashboard) ---
-const INITIAL_DATA = [
-  { id: 1, name: "Food & Dining", limit: 600, spent: 450 },
-  { id: 2, name: "Transportation", limit: 200, spent: 120 },
-  { id: 3, name: "Entertainment", limit: 300, spent: 350 }, // Over budget
-  { id: 4, name: "Shopping", limit: 500, spent: 180 },
-  { id: 5, name: "Utilities", limit: 300, spent: 295 },
-  { id: 6, name: "Travel", limit: 1000, spent: 1050 }, // Over budget
-];
-// --- END MOCK DATA ---
 
 const ReportPage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 5, 1)); // June 2025
-
   const { categories } = useSelector((state) => state.category);
 
-  console.log({ categories });
 
   // Helper: Format Currency
   const formatCurrency = (amount) => {
@@ -29,14 +15,6 @@ const ReportPage = () => {
       style: "currency",
       currency: "USD",
     }).format(amount);
-  };
-
-  // Helper: Handle Month Change
-  const changeMonth = (offset) => {
-    const newDate = new Date(
-      currentDate.setMonth(currentDate.getMonth() + offset)
-    );
-    setCurrentDate(new Date(newDate));
   };
 
   return (
@@ -79,12 +57,14 @@ const ReportPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {categories?.map((item) => {
-                const remaining = item?.category?.limitCents - item?.totalSpent;
+              {categories?.map((item,index) => {
+                const remaining = item?.totalSpent - item?.budget?.limitCents;
                 const isOverBudget = remaining < 0;
 
+                
+
                 return (
-                  <tr key={item._id} className="hover:bg-gray-50">
+                  <tr key={index} className="hover:bg-gray-50">
                     {/* Category Name */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white hover:bg-gray-50 transition-colors">
                       {item?.name}

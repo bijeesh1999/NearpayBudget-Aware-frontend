@@ -20,8 +20,6 @@ export const ExpenseCard = ({ cat }) => {
       ? 0
       : cat?.totalSpent - cat?.budget?.limitCents;
 
-  console.log({ isOverBudget });
-
   return (
     <>
       {/* Card Top: Name & Color */}

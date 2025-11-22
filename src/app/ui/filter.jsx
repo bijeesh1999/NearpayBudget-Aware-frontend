@@ -9,7 +9,6 @@ const statusOptions = [
 
 export function FilterField({params, setParams}) {
   const handleFilter = (e) => {
-    console.log({ e: e.target.value });
     setParams((prev) => ({
       ...params,
       status: e.target.value,

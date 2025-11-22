@@ -1,10 +1,8 @@
 
 import axios from "axios";
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/expense`;
-console.log({ url: API_BASE_URL });
 
 export const createExpenses = async (body) => {
-  console.log({ body });
   try {
     const newUser = await axios.post(`${API_BASE_URL}/create`, body);
     return newUser;
@@ -14,7 +12,6 @@ export const createExpenses = async (body) => {
 };
 
 export const findAllExpenses = async (body) => {
-  console.log({ body });
   try {
     const newUser = await axios.post(
       `${API_BASE_URL}/list??month=${body.date}`,
@@ -27,7 +24,6 @@ export const findAllExpenses = async (body) => {
 };
 
 export const updateExpenses = async ({ id, body }) => {
-  console.log({ id, body });
   try {
     const newUser = await axios.put(`${API_BASE_URL}/update/${id}`, body);
     return newUser;
@@ -37,7 +33,6 @@ export const updateExpenses = async ({ id, body }) => {
 };
 
 export const deleteExpenses = async (id) => {
-  console.log({ id, body });
   try {
     const newUser = await axios.put(`${API_BASE_URL}/delete/${id}`, {
       isDeleted: false,

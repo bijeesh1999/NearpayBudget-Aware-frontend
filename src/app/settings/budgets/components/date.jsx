@@ -27,7 +27,6 @@ export const Month = ({close}) => {
 
   const { status } = useSelector((state) => state.budget) || [];
 
-  console.log({ status });
 
   // Helper: Handle Month Change using offset (for Chevron buttons)
   const changeMonth = (offset) => {
@@ -61,7 +60,6 @@ export const Month = ({close}) => {
     }
   }, [status]);
 
-  console.log(currentMonthYear);
 
   return (
     <div className="flex items-center space-x-2">

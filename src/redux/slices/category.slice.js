@@ -17,7 +17,6 @@ export const createNewCategory = createAsyncThunk(
 );
 
 export const listCategory = createAsyncThunk("category/list", async (body) => {
-  console.log(body);
 
   const res = await findAllCategory(body);
   return res.data;
@@ -26,7 +25,6 @@ export const listCategory = createAsyncThunk("category/list", async (body) => {
 export const putOneCategory = createAsyncThunk(
   "category/update",
   async ({ id, body }) => {
-    console.log(body);
 
     const res = await updateCategory({ id, body });
     return res.data;
@@ -36,7 +34,6 @@ export const putOneCategory = createAsyncThunk(
 export const getOneCategory = createAsyncThunk(
   "category/fineOne",
   async ({ id }) => {
-    console.log(id);
 
     const res = await findCategory({ id });
     return res.data;
@@ -54,7 +51,6 @@ export const deleteOneCategory = createAsyncThunk(
 export const listUserCategory = createAsyncThunk(
   "userCategory/list",
   async (body) => {
-    console.log(body);
 
     const res = await findAllUsercategory(body);
     return res.data;

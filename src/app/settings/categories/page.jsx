@@ -19,7 +19,6 @@ const CategoryTable = () => {
   const [category, setCategory] = React.useState(null);
   let [isOpen, setIsOpen] = useState(false);
   const { status, categories } = useSelector((state) => state.category);
-  console.log({ categories });
 
   const handleDelete = (categoryId) => {
     const confirmed = window.confirm(
@@ -58,7 +57,6 @@ const CategoryTable = () => {
   }
 
   React.useEffect(() => {
-    console.log({ status });
     if (["created", "updated", "deleted"].includes(status)) {
       closeModal();
       fetchCategory();
@@ -124,13 +122,14 @@ const CategoryTable = () => {
         <tbody className="bg-white divide-y divide-gray-200">
           {categories.map((category, index) => {
             const progress = getProgressPercentage(
-              category?.expense?.amountCents || 0,
+              category?.totalSpent || 0,
               category?.budget?.limitCents || 0
             );
             const overBudget = isOverBudget(
-              "2000",
+              category?.totalSpent || 0,
               category.budget?.limitCents
             );
+
 
             return (
               <tr key={index} className="hover:bg-gray-50 transition-colors">
@@ -138,6 +137,7 @@ const CategoryTable = () => {
                   <input
                     type="checkbox"
                     checked={false}
+                    onChange={() => {}}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                 </td>
@@ -154,7 +154,9 @@ const CategoryTable = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">
-                    ${category?.budget?.limitCents}
+                    {category?.budget?.limitCents
+                      ? `$${category?.budget?.limitCents}`
+                      : "NA"}
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -163,14 +165,13 @@ const CategoryTable = () => {
                       <div
                         className="h-2 rounded-full transition-all duration-300"
                         style={{
-                          width: `${progress}%`,
+                          width: `${progress || 0}%`,
                           backgroundColor: category.color,
                         }}
                       />
                     </div>
                     <span className="text-xs text-gray-500 w-12">
-                      {console.log({ progress })}
-                      {progress.toFixed(1)}%
+                      {progress ? progress.toFixed(1) : 0}%
                     </span>
                   </div>
                 </td>
@@ -178,6 +179,10 @@ const CategoryTable = () => {
                   {overBudget ? (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                       Over Budget
+                    </span>
+                  ) : !category?.budget ? (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                      On Track
                     </span>
                   ) : (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">

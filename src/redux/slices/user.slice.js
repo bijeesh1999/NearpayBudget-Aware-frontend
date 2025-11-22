@@ -11,16 +11,13 @@ export const signup = createAsyncThunk("user/signup", async (body) => {
 });
 
 export const login = createAsyncThunk("user/login", async (body) => {
-  console.log(body);
 
   const res = await loginUser(body);
   return res.data;
 });
 
-export const logout = createAsyncThunk("user/logout", async (body) => {
-  console.log(body);
-
-  const res = await logoutUser(id, body);
+export const logout = createAsyncThunk("user/logout", async () => {
+  const res = await logoutUser();
   return res.data;
 });
 
@@ -34,7 +31,11 @@ const initialState = {
 const UserSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    resetStatus: (state) => {
+      state.status = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signup.pending, (state) => {
@@ -68,7 +69,7 @@ const UserSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(logout.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = "logout";
         state.user = action.payload.data;
         state.isLoading = false;
       })
@@ -79,6 +80,6 @@ const UserSlice = createSlice({
   },
 });
 
-export const {} = UserSlice.actions;
+export const { resetStatus } = UserSlice.actions;
 
 export default UserSlice.reducer;

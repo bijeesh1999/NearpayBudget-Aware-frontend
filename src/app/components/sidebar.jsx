@@ -14,13 +14,17 @@ import {
 } from "lucide-react";
 // 1. Import Link
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Use usePathname to determine active link
+import { usePathname,useParams } from "next/navigation"; // Use usePathname to determine active link
+import { Logout } from "./logout";
 
 export const Sidebar = ({ children }) => {
   const pathname = usePathname(); // Get current URL path
+  const params = useParams(); // Get current URL path
+
 
   // State for Desktop Sidebar (Expanded/Collapsed)
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isPath, setIsPath] = useState(true);
 
   // State for Mobile Drawer (Open/Closed)
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -81,7 +85,7 @@ export const Sidebar = ({ children }) => {
         >
           {label}
         </span>
-      </Link>   
+      </Link>
     );
   };
 
@@ -108,6 +112,12 @@ export const Sidebar = ({ children }) => {
             FinanceApp
           </span>
         </Link>
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="w-full flex items-center justify-center p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </button>
       </div>
 
       {/* Navigation List */}
@@ -190,44 +200,50 @@ export const Sidebar = ({ children }) => {
       </nav>
 
       {/* Footer / Collapse Toggle (Desktop Only) */}
-      <div className="hidden md:flex p-4 border-t border-gray-100">
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-full flex items-center justify-center p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-        </button>
-      </div>
+      <Logout />
     </div>
   );
+
+  React.useEffect(() => {
+    if (pathname === "/login" || pathname === "/signUp") {
+      setIsPath(false);
+    }else{
+      setIsPath(true)
+    }
+  }, [pathname]);
+
 
   return (
     <div className="flex h-screen bg-gray-50 font-sans">
       {/* --- MOBILE HEADER (Visible only on small screens) --- */}
       <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-30 flex items-center px-4 justify-between">
-        <div className="flex items-center">
-          <button
-            onClick={() => setIsMobileOpen(true)}
-            className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-md"
-          >
-            <Menu size={24} />
-          </button>
-          <span className="ml-3 font-bold text-lg text-gray-800">
-            FinanceApp
-          </span>
-        </div>
+        {isPath && (
+          <div className="flex items-center">
+            <button
+              onClick={() => setIsMobileOpen(true)}
+              className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-md"
+            >
+              <Menu size={24} />
+            </button>
+            <span className="ml-3 font-bold text-lg text-gray-800">
+              FinanceApp
+            </span>
+          </div>
+        )}
       </header>
 
       {/* --- SIDEBAR (DESKTOP) --- */}
-      <aside
-        className={`
+      {isPath && (
+        <aside
+          className={`
           hidden md:block h-screen bg-white border-r border-gray-200
           transition-all duration-300 ease-in-out fixed top-0 left-0 z-10
           ${isCollapsed ? "w-20" : "w-64"}
         `}
-      >
-        <SidebarContent />
-      </aside>
+        >
+          <SidebarContent />
+        </aside>
+      )}
 
       {/* --- SIDEBAR (MOBILE DRAWER) --- */}
       {/* Backdrop */}
@@ -239,25 +255,29 @@ export const Sidebar = ({ children }) => {
       )}
 
       {/* Drawer Panel */}
-      <div
-        className={`
+      {isPath && (
+        <div
+          className={`
         fixed inset-y-0 left-0 z-50 w-64 bg-white transform transition-transform duration-300 ease-in-out md:hidden
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
       `}
-      >
-        {/* Close Button for Mobile */}
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={() => setIsMobileOpen(false)}
-            className="p-1 text-gray-500 hover:bg-gray-100 rounded-full"
-          >
-            <X size={24} />
-          </button>
+        >
+          {/* Close Button for Mobile */}
+          <div className="absolute top-4 right-4">
+            <button
+              onClick={() => setIsMobileOpen(false)}
+              className="p-1 text-gray-500 hover:bg-gray-100 rounded-full"
+            >
+              <X size={24} />
+            </button>
+          </div>
+          <SidebarContent />
         </div>
-        <SidebarContent />
+      )}
+
+      <div className="flex items-center justify-center w-full h-full pt-30">
+        {children}
       </div>
-  
-        <div className="flex items-center justify-center w-full h-full pt-30">{children}</div>
     </div>
   );
 };

@@ -15,7 +15,6 @@ export const createNewBudget = createAsyncThunk(
 );
 
 export const listBudget = createAsyncThunk("budget/list", async (body) => {
-  console.log(body);
 
   const res = await findAllBudget(body);
   return res.data;
@@ -24,7 +23,6 @@ export const listBudget = createAsyncThunk("budget/list", async (body) => {
 export const putOneBudget = createAsyncThunk(
   "budget/update",
   async ({ id, limitCents }) => {
-    console.log({ id, limitCents });
 
     const res = await updateBudget({ id, limitCents });
     return res.data;
