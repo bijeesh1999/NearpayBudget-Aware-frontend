@@ -11,7 +11,7 @@ import {
   deleteOneCategory,
   listCategory,
 } from "@/src/redux/slices/category.slice";
-import TableBodySkeleton from "../../reports/components/skeliton";
+import TableBodySkeleton, { NoDataRow } from "../../reports/components/skeliton";
 
 const CategoryTable = () => {
   const dispatch = useDispatch();
