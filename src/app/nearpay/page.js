@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-export default function Home() {
+export default function NearpayPage() {
   
-  redirect("/dashboard");
+  redirect("/nearpay/dashboard");
 }
