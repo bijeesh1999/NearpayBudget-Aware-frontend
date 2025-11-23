@@ -1,57 +1,70 @@
 import axios from "axios";
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/budget`;
 axios.defaults.withCredentials = true;
 
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/budget`;
 
+// Create
 export const createBudget = async (body) => {
   try {
-    const newUser = await axios.post(`${API_BASE_URL}/create`, body);
-    return newUser;
+    const res = await axios.post(`${API_BASE_URL}/create`, body, {
+      withCredentials: true,
+    });
+    return res;
   } catch (error) {
     return error;
   }
 };
 
+// List
 export const findAllBudget = async (body) => {
   try {
-    const newUser = await axios.post(
-      `${API_BASE_URL}/list??month=${body.date}`,
-      body
+    const res = await axios.post(
+      `${API_BASE_URL}/list?month=${body.date}`,
+      body,
+      { withCredentials: true }
     );
-    return newUser;
+    return res;
   } catch (error) {
     return error;
   }
 };
 
+// Update
 export const updateBudget = async ({ id, limitCents }) => {
   try {
-    const newUser = await axios.put(`${API_BASE_URL}/update/${id}`, {
-      limitCents,
-    });
-    return newUser;
+    const res = await axios.put(
+      `${API_BASE_URL}/update/${id}`,
+      { limitCents },
+      { withCredentials: true }
+    );
+    return res;
   } catch (error) {
     return error;
   }
 };
 
+// Find One
 export const findOnebudget = async ({ id }) => {
   try {
-    const budget = await axios.get(`${API_BASE_URL}/find/${id}`);
-    return budget;
+    const res = await axios.get(`${API_BASE_URL}/find/${id}`, {
+      withCredentials: true,
+    });
+    return res;
   } catch (error) {
     return error;
   }
 };
 
+// Delete
 export const deleteBudget = async ({ id }) => {
   try {
-    const newUser = await axios.put(`${API_BASE_URL}/delete/${id}`, {
-      isDeleted: true,
-    });
-    return newUser;
+    const res = await axios.put(
+      `${API_BASE_URL}/delete/${id}`,
+      { isDeleted: true },
+      { withCredentials: true }
+    );
+    return res;
   } catch (error) {
     return error;
   }
 };
-
