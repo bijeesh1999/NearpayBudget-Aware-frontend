@@ -14,16 +14,15 @@ import {
 } from "lucide-react";
 // 1. Import Link
 import Link from "next/link";
-import { usePathname,useParams } from "next/navigation"; // Use usePathname to determine active link
+import { usePathname, useParams } from "next/navigation"; // Use usePathname to determine active link
 import { Logout } from "./logout";
 
 export const Sidebar = ({ children }) => {
   const pathname = usePathname(); // Get current URL path
   const params = useParams(); // Get current URL path
 
-
   // State for Desktop Sidebar (Expanded/Collapsed)
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [isPath, setIsPath] = useState(true);
 
   // State for Mobile Drawer (Open/Closed)
@@ -207,11 +206,10 @@ export const Sidebar = ({ children }) => {
   React.useEffect(() => {
     if (pathname === "/login" || pathname === "/signUp") {
       setIsPath(false);
-    }else{
-      setIsPath(true)
+    } else {
+      setIsPath(true);
     }
   }, [pathname]);
-
 
   return (
     <div className="flex h-screen bg-gray-50 font-sans">

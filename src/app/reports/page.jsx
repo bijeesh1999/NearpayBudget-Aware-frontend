@@ -3,11 +3,10 @@ import React, { useState } from "react";
 import { Header } from "../components/header";
 import { Month } from "../dashboard/components/dates";
 import { useSelector } from "react-redux";
-
+import TableBodySkeleton, { NoDataRow } from "./components/skeliton";
 
 const ReportPage = () => {
-  const { categories } = useSelector((state) => state.category);
-
+  const { categories, isLoading } = useSelector((state) => state.category);
 
   // Helper: Format Currency
   const formatCurrency = (amount) => {
@@ -57,42 +56,45 @@ const ReportPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {categories?.map((item,index) => {
-                const remaining = item?.totalSpent - item?.budget?.limitCents;
-                const isOverBudget = remaining < 0;
+              {isLoading ? (
+                <TableBodySkeleton />
+              ) : categories.length ? (
+                categories?.map((item, index) => {
+                  const remaining = item?.totalSpent - item?.budget?.limitCents;
+                  const isOverBudget = remaining < 0;
+                  return (
+                    <tr key={index} className="hover:bg-gray-50">
+                      {/* Category Name */}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white hover:bg-gray-50 transition-colors">
+                        {item?.name}
+                      </td>
 
-                
+                      {/* Budget Limit */}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                        {formatCurrency(item?.budget?.limitCents)}
+                      </td>
 
-                return (
-                  <tr key={index} className="hover:bg-gray-50">
-                    {/* Category Name */}
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white hover:bg-gray-50 transition-colors">
-                      {item?.name}
-                    </td>
+                      {/* Amount Spent */}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium text-right">
+                        {formatCurrency(item.totalSpent)}
+                      </td>
 
-                    {/* Budget Limit */}
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                      {formatCurrency(item?.budget?.limitCents)}
-                    </td>
-
-                    {/* Amount Spent */}
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium text-right">
-                      {formatCurrency(item.totalSpent)}
-                    </td>
-
-                    {/* Remaining (Conditional Highlighting) */}
-                    <td
-                      className={`px-6 py-4 whitespace-nowrap text-sm font-semibold text-right ${
-                        isOverBudget ? "text-red-600" : "text-green-600"
-                      }`}
-                    >
-                      {/* Show absolute value with a negative sign if over budget */}
-                      {isOverBudget ? "-" : ""}
-                      {formatCurrency(Math.abs(remaining))}
-                    </td>
-                  </tr>
-                );
-              })}
+                      {/* Remaining (Conditional Highlighting) */}
+                      <td
+                        className={`px-6 py-4 whitespace-nowrap text-sm font-semibold text-right ${
+                          isOverBudget ? "text-red-600" : "text-green-600"
+                        }`}
+                      >
+                        {/* Show absolute value with a negative sign if over budget */}
+                        {isOverBudget ? "-" : ""}
+                        {formatCurrency(Math.abs(remaining))}
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <NoDataRow />
+              )}
             </tbody>
           </table>
         </div>

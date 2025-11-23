@@ -11,6 +11,7 @@ import {
   deleteOneCategory,
   listCategory,
 } from "@/src/redux/slices/category.slice";
+import TableBodySkeleton from "../../reports/components/skeliton";
 
 const CategoryTable = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,9 @@ const CategoryTable = () => {
   // const [categories, setCategories] = useState(initialCategories);
   const [category, setCategory] = React.useState(null);
   let [isOpen, setIsOpen] = useState(false);
-  const { status, categories } = useSelector((state) => state.category);
+  const { status, categories, isLoading } = useSelector(
+    (state) => state.category
+  );
 
   const handleDelete = (categoryId) => {
     const confirmed = window.confirm(
@@ -120,96 +123,101 @@ const CategoryTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {categories.map((category, index) => {
-            const progress = getProgressPercentage(
-              category?.totalSpent || 0,
-              category?.budget?.limitCents || 0
-            );
-            const overBudget = isOverBudget(
-              category?.totalSpent || 0,
-              category.budget?.limitCents
-            );
+          {isLoading ? (
+            <TableBodySkeleton />
+          ) : categories.length ? (
+            categories.map((category, index) => {
+              const progress = getProgressPercentage(
+                category?.totalSpent || 0,
+                category?.budget?.limitCents || 0
+              );
+              const overBudget = isOverBudget(
+                category?.totalSpent || 0,
+                category.budget?.limitCents
+              );
 
-
-            return (
-              <tr key={index} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="checkbox"
-                    checked={false}
-                    onChange={() => {}}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div
-                      className="w-3 h-3 rounded-full mr-3"
-                      style={{ backgroundColor: category.color }}
+              return (
+                <tr key={index} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      checked={false}
+                      onChange={() => {}}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    <div className="text-sm font-medium text-gray-900">
-                      {category?.name}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {category?.budget?.limitCents
-                      ? `$${category?.budget?.limitCents}`
-                      : "NA"}
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-24 bg-gray-200 rounded-full h-2">
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
                       <div
-                        className="h-2 rounded-full transition-all duration-300"
-                        style={{
-                          width: `${progress || 0}%`,
-                          backgroundColor: category.color,
-                        }}
+                        className="w-3 h-3 rounded-full mr-3"
+                        style={{ backgroundColor: category.color }}
                       />
+                      <div className="text-sm font-medium text-gray-900">
+                        {category?.name}
+                      </div>
                     </div>
-                    <span className="text-xs text-gray-500 w-12">
-                      {progress ? progress.toFixed(1) : 0}%
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {overBudget ? (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                      Over Budget
-                    </span>
-                  ) : !category?.budget ? (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                      On Track
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      On Track
-                    </span>
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => handleEdit(category)}
-                      className="text-blue-600 hover:text-blue-900 transition-colors"
-                    >
-                      Edit
-                    </button>
-                    <span className="text-gray-300">|</span>
-                    <button
-                      onClick={() => handleDelete(category._id)}
-                      className="text-red-600 hover:text-red-900 transition-colors"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {category?.budget?.limitCents
+                        ? `$${category?.budget?.limitCents}`
+                        : "NA"}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-24 bg-gray-200 rounded-full h-2">
+                        <div
+                          className="h-2 rounded-full transition-all duration-300"
+                          style={{
+                            width: `${progress || 0}%`,
+                            backgroundColor: category.color,
+                          }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-500 w-12">
+                        {progress ? progress.toFixed(1) : 0}%
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {overBudget ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        Over Budget
+                      </span>
+                    ) : !category?.budget ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                        On Track
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        On Track
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(category)}
+                        className="text-blue-600 hover:text-blue-900 transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <span className="text-gray-300">|</span>
+                      <button
+                        onClick={() => handleDelete(category._id)}
+                        className="text-red-600 hover:text-red-900 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <NoDataRow />
+          )}
         </tbody>
       </Table>
 
